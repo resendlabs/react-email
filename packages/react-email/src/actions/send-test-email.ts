@@ -38,6 +38,6 @@ export async function sendTestEmail({
   return {
     code: response.status,
     ok: response.ok,
-    body: SendTestEmailResponse.parse(await response.json())
+    body: SendTestEmailResponse.parse(await response.json()),
   };
 }

@@ -8,7 +8,8 @@ import { Text } from './text';
 
 const useTimer = (startingSeconds: number) => {
   const [isRatelimiting, setIsRatelimiting] = React.useState(false);
-  const [secondsRemaining, setSecondsRemaining] = React.useState(startingSeconds);
+  const [secondsRemaining, setSecondsRemaining] =
+    React.useState(startingSeconds);
 
   const interval = React.useRef<NodeJS.Timer | undefined>(undefined);
 
