@@ -6,9 +6,9 @@ import { sendTestEmail } from '../actions/send-test-email';
 import { Button } from './button';
 import { Text } from './text';
 
-const useRatelimiting = (ratelimitingSeconds: number) => {
+const useTimer = (startingSeconds: number) => {
   const [isRatelimiting, setIsRatelimiting] = React.useState(false);
-  const [secondsRemaining, setSecondsRemaining] = React.useState(ratelimitingSeconds);
+  const [secondsRemaining, setSecondsRemaining] = React.useState(startingSeconds);
 
   const interval = React.useRef<NodeJS.Timer | undefined>(undefined);
 
@@ -17,10 +17,10 @@ const useRatelimiting = (ratelimitingSeconds: number) => {
     secondsRemaining,
     start: () => {
       setIsRatelimiting(true);
-      setSecondsRemaining(ratelimitingSeconds);
+      setSecondsRemaining(startingSeconds);
       clearInterval(interval.current);
 
-      let secondsRemainingTemp = ratelimitingSeconds;
+      let secondsRemainingTemp = startingSeconds;
       interval.current = setInterval(() => {
         setSecondsRemaining((v) => v - 1);
         secondsRemainingTemp -= 1;
@@ -28,7 +28,7 @@ const useRatelimiting = (ratelimitingSeconds: number) => {
         if (secondsRemainingTemp <= 0) {
           clearInterval(interval.current);
           setIsRatelimiting(false);
-          setSecondsRemaining(ratelimitingSeconds);
+          setSecondsRemaining(startingSeconds);
         }
       }, 1_000);
     },
@@ -40,7 +40,7 @@ export const Send = ({ markup }: { markup: string }) => {
   const [subject, setSubject] = React.useState('Testing React Email');
   const [isSending, setIsSending] = React.useState(false);
   const [isPopOverOpen, setIsPopOverOpen] = React.useState(false);
-  const rateLimiter = useRatelimiting(10);
+  const rateLimiter = useTimer(15);
 
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
