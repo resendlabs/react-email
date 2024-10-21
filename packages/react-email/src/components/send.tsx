@@ -6,18 +6,18 @@ import { sendTestEmail } from '../actions/send-test-email';
 import { Button } from './button';
 import { Text } from './text';
 
-const useTimer = (startingSeconds: number) => {
-  const [isRatelimiting, setIsRatelimiting] = React.useState(false);
+const useTimer = (startingSeconds: number, onStop?: () => void) => {
+  const [isActive, setIsActive] = React.useState(false);
   const [secondsRemaining, setSecondsRemaining] =
     React.useState(startingSeconds);
 
   const interval = React.useRef<NodeJS.Timer | undefined>(undefined);
 
   return {
-    isActive: isRatelimiting,
+    isActive,
     secondsRemaining,
     start: () => {
-      setIsRatelimiting(true);
+      setIsActive(true);
       setSecondsRemaining(startingSeconds);
       clearInterval(interval.current);
 
@@ -28,8 +28,9 @@ const useTimer = (startingSeconds: number) => {
 
         if (secondsRemainingTemp <= 0) {
           clearInterval(interval.current);
-          setIsRatelimiting(false);
+          setIsActive(false);
           setSecondsRemaining(startingSeconds);
+          onStop?.();
         }
       }, 1_000);
     },
@@ -41,7 +42,11 @@ export const Send = ({ markup }: { markup: string }) => {
   const [subject, setSubject] = React.useState('Testing React Email');
   const [isSending, setIsSending] = React.useState(false);
   const [isPopOverOpen, setIsPopOverOpen] = React.useState(false);
-  const rateLimiter = useTimer(15);
+
+  const [isRateLimited, setRateLimited] = React.useState(false);
+  const rateLimiter = useTimer(60, () => {
+    setRateLimited(false);
+  });
 
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,11 +59,15 @@ export const Send = ({ markup }: { markup: string }) => {
         markup,
       });
 
+      if (!rateLimiter.isActive) {
+        rateLimiter.start();
+      }
+
       if (ok) {
         toast.success('Email sent! Check your inbox.');
       } else if (code === 429) {
         toast.error('Too many requests.');
-        rateLimiter.start();
+        setRateLimited(true);
       }
     } catch (exception) {
       toast.error('Something went wrong. Please try again.');
@@ -152,12 +161,12 @@ export const Send = ({ markup }: { markup: string }) => {
                   subject.length === 0 ||
                   to.length === 0 ||
                   isSending ||
-                  rateLimiter.isActive
+                  isRateLimited
                 }
                 type="submit"
               >
                 Send
-                {rateLimiter.isActive
+                {isRateLimited
                   ? ` ${rateLimiter.secondsRemaining}s`
                   : null}
               </Button>
