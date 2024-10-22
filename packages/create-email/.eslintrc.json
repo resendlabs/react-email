@@ -1,0 +1,8 @@
+{
+  "ignorePatterns": ["templates/*"],
+  "extends": ["custom/library"],
+  "rules": {
+    "no-console": "off",
+    "@typescript-eslint/no-unsafe-call": "off"
+  }
+}
