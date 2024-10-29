@@ -29,6 +29,7 @@ const Preview = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const activeTheme = searchParams.get('theme') ?? 'light';
   const activeView = searchParams.get('view') ?? 'desktop';
   const activeLang = searchParams.get('lang') ?? 'jsx';
   const { useEmailRenderingResult } = useEmails();
@@ -74,6 +75,12 @@ const Preview = ({
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  const handleThemeChange = (theme: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('theme', theme);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   const hasNoErrors = typeof renderedEmailMetadata !== 'undefined';
 
   return (
@@ -83,6 +90,8 @@ const Preview = ({
       markup={renderedEmailMetadata?.markup}
       pathSeparator={pathSeparator}
       setActiveView={hasNoErrors ? handleViewChange : undefined}
+      setTheme={hasNoErrors ? handleThemeChange : undefined}
+      theme={hasNoErrors ? activeTheme : undefined}
     >
       {/* This relative is so that when there is any error the user can still switch between emails */}
       <div className="relative h-full">
