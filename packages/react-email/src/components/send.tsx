@@ -166,9 +166,7 @@ export const Send = ({ markup }: { markup: string }) => {
                 type="submit"
               >
                 Send
-                {isRateLimited
-                  ? ` ${rateLimiter.secondsRemaining}s`
-                  : null}
+                {isRateLimited ? ` ${rateLimiter.secondsRemaining}s` : null}
               </Button>
             </div>
           </form>
