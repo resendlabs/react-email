@@ -2,6 +2,7 @@
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { motion } from 'framer-motion';
 import * as React from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '../utils';
 import { tabTransition } from '../utils/constants';
 import { Heading } from './heading';
@@ -9,26 +10,42 @@ import { IconHideSidebar } from './icons/icon-hide-sidebar';
 import { IconMonitor } from './icons/icon-monitor';
 import { IconPhone } from './icons/icon-phone';
 import { IconSource } from './icons/icon-source';
+import { IconSun } from './icons/icon-sun';
+import { IconMoon } from './icons/icon-moon';
 import { Send } from './send';
 import { Tooltip } from './tooltip';
 
 interface TopbarProps {
   currentEmailOpenSlug: string;
   pathSeparator: string;
-  activeView?: string;
   markup?: string;
   onToggleSidebar?: () => void;
-  setActiveView?: (view: string) => void;
 }
 
 export const Topbar: React.FC<Readonly<TopbarProps>> = ({
   currentEmailOpenSlug,
   pathSeparator,
   markup,
-  activeView,
-  setActiveView,
   onToggleSidebar,
 }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const activeTheme = searchParams.get('theme') ?? 'light';
+  const activeView = searchParams.get('view') ?? 'desktop';
+
+  const setActiveView = (view: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('view', view);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const setTheme = (theme: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('theme', theme);
+    router.push(`${pathname}?${params.toString()}`);
+  };
   return (
     <Tooltip.Provider>
       <header className="flex relative items-center px-4 justify-between h-[70px] border-b border-slate-6">
@@ -57,10 +74,79 @@ export const Topbar: React.FC<Readonly<TopbarProps>> = ({
 
         <div className="flex gap-3 justify-between lg:justify-start w-full lg:w-fit">
           <ToggleGroup.Root
+            aria-label="Color Scheme"
+            className="inline-block items-center bg-slate-2 border border-slate-6 rounded-md overflow-hidden h-[36px]"
+            id="theme-toggle"
+            onValueChange={(value) => {
+              if (value) setTheme(value);
+            }}
+            type="single"
+            value={activeTheme}
+          >
+            <ToggleGroup.Item value="light">
+              <Tooltip>
+                <Tooltip.Trigger asChild>
+                  <div
+                    className={cn(
+                      'px-3 py-2 transition ease-in-out duration-200 relative hover:text-slate-12',
+                      {
+                        'text-slate-11': activeTheme !== 'light',
+                        'text-slate-12': activeTheme === 'light',
+                      },
+                    )}
+                  >
+                    {activeTheme === 'light' && (
+                      <motion.span
+                        animate={{ opacity: 1 }}
+                        className="absolute left-0 right-0 top-0 bottom-0 bg-slate-4"
+                        exit={{ opacity: 0 }}
+                        initial={{ opacity: 0 }}
+                        layoutId="topbar-theme-tabs"
+                        transition={tabTransition}
+                      />
+                    )}
+                    <IconSun />
+                  </div>
+                </Tooltip.Trigger>
+                <Tooltip.Content>Light</Tooltip.Content>
+              </Tooltip>
+            </ToggleGroup.Item>
+            <ToggleGroup.Item value="dark">
+              <Tooltip>
+                <Tooltip.Trigger asChild>
+                  <div
+                    className={cn(
+                      'px-3 py-2 transition ease-in-out duration-200 relative hover:text-slate-12',
+                      {
+                        'text-slate-11': activeTheme !== 'dark',
+                        'text-slate-12': activeTheme === 'dark',
+                      },
+                    )}
+                  >
+                    {activeTheme === 'dark' && (
+                      <motion.span
+                        animate={{ opacity: 1 }}
+                        className="absolute left-0 right-0 top-0 bottom-0 bg-slate-4"
+                        exit={{ opacity: 0 }}
+                        initial={{ opacity: 0 }}
+                        layoutId="topbar-theme-tabs"
+                        transition={tabTransition}
+                      />
+                    )}
+                    <IconMoon />
+                  </div>
+                </Tooltip.Trigger>
+                <Tooltip.Content>Dark</Tooltip.Content>
+              </Tooltip>
+            </ToggleGroup.Item>
+          </ToggleGroup.Root>
+
+          <ToggleGroup.Root
             aria-label="View mode"
             className="inline-block items-center bg-slate-2 border border-slate-6 rounded-md overflow-hidden h-[36px]"
+            id="view-toggle"
             onValueChange={(value) => {
-              if (value) setActiveView?.(value);
+              if (value) setActiveView(value);
             }}
             type="single"
             value={activeView}
@@ -83,7 +169,7 @@ export const Topbar: React.FC<Readonly<TopbarProps>> = ({
                         className="absolute left-0 right-0 top-0 bottom-0 bg-slate-4"
                         exit={{ opacity: 0 }}
                         initial={{ opacity: 0 }}
-                        layoutId="topbar-tabs"
+                        layoutId="topbar-view-tabs"
                         transition={tabTransition}
                       />
                     )}
@@ -111,7 +197,7 @@ export const Topbar: React.FC<Readonly<TopbarProps>> = ({
                         className="absolute left-0 right-0 top-0 bottom-0 bg-slate-4"
                         exit={{ opacity: 0 }}
                         initial={{ opacity: 0 }}
-                        layoutId="topbar-tabs"
+                        layoutId="topbar-view-tabs"
                         transition={tabTransition}
                       />
                     )}
@@ -139,7 +225,7 @@ export const Topbar: React.FC<Readonly<TopbarProps>> = ({
                         className="absolute left-0 right-0 top-0 bottom-0 bg-slate-4"
                         exit={{ opacity: 0 }}
                         initial={{ opacity: 0 }}
-                        layoutId="topbar-tabs"
+                        layoutId="topbar-view-tabs"
                         transition={tabTransition}
                       />
                     )}
