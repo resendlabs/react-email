@@ -3,14 +3,14 @@ import { Suspense } from "react";
 import { pretty } from "../shared/utils/pretty";
 import { plainTextSelectors } from "../shared/plain-text-selectors";
 import type { Options } from "../shared/options";
-import { readStream } from "./read-stream";
+import { readStream } from "../shared/read-stream.browser";
 
 export const renderAsync = async (
   element: React.ReactElement,
   options?: Options,
 ) => {
   const suspendedElement = <Suspense>{element}</Suspense>;
-  const { default: reactDOMServer } = await import("react-dom/server");
+  const reactDOMServer = await import("react-dom/server");
 
   let html!: string;
   if (Object.hasOwn(reactDOMServer, "renderToReadableStream")) {

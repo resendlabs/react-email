@@ -5,12 +5,15 @@ import { plainTextSelectors } from "../shared/plain-text-selectors";
 import type { Options } from "../shared/options";
 import { readStream } from "../shared/read-stream.browser";
 
-export const render = async (
+/**
+ * @deprecated use `render`
+ */
+export const renderAsync = async (
   element: React.ReactElement,
   options?: Options,
 ) => {
   const suspendedElement = <Suspense>{element}</Suspense>;
-  const reactDOMServer = await import("react-dom/server");
+  const { default: reactDOMServer } = await import("react-dom/server.edge");
 
   let html!: string;
   if (Object.hasOwn(reactDOMServer, "renderToReadableStream")) {
