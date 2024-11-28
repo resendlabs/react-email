@@ -10,6 +10,7 @@ import type { ErrorObject } from './types/error-object';
 import { improveErrorWithSourceMap } from './improve-error-with-sourcemap';
 import { staticNodeModulesForVM } from './static-node-modules-for-vm';
 import { renderingUtilitiesExporter } from './esbuild/renderring-utilities-exporter';
+import { userProjectLocation } from './emails-directory-absolute-path';
 
 export const getEmailComponent = async (
   emailPath: string,
@@ -80,7 +81,12 @@ export const getEmailComponent = async (
     Headers,
     module: {
       exports: {
-        default: undefined as unknown,
+        /**
+         * This is the plain module.exports value that is maintained
+         * after running the rendering utilities exporter plugin
+         */
+        actualExport: undefined as unknown,
+
         render: undefined as unknown,
         reactEmailCreateReactElement: undefined as unknown,
       },
@@ -129,11 +135,25 @@ export const getEmailComponent = async (
     };
   }
 
-  if (fakeContext.module.exports.default === undefined) {
+  let emailComponent: EmailComponent;
+  if (typeof fakeContext.module.exports.actualExport === 'function') {
+    emailComponent = fakeContext.module.exports.actualExport as EmailComponent;
+  } else if (
+    fakeContext.module.exports.actualExport &&
+    typeof fakeContext.module.exports.actualExport === 'object' &&
+    'default' in fakeContext.module.exports.actualExport &&
+    typeof fakeContext.module.exports.actualExport.default === 'function'
+  ) {
+    emailComponent = fakeContext.module.exports.actualExport
+      .default as EmailComponent;
+  } else {
     return {
       error: improveErrorWithSourceMap(
         new Error(
-          `The email component at ${emailPath} does not contain a default export`,
+          `The email component at ${path.relative(
+            userProjectLocation,
+            emailPath,
+          )} does not contain a default export`,
         ),
         emailPath,
         sourceMapToEmail,
@@ -142,7 +162,7 @@ export const getEmailComponent = async (
   }
 
   return {
-    emailComponent: fakeContext.module.exports.default as EmailComponent,
+    emailComponent,
     render: fakeContext.module.exports.render as typeof render,
     createElement: fakeContext.module.exports
       .reactEmailCreateReactElement as typeof React.createElement,
