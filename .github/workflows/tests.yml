@@ -22,7 +22,7 @@ jobs:
           echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
 
       - name: pnpm Cache
-        uses: buildjet/cache@v3
+        uses: buildjet/cache@v4
         with:
           path: ${{ steps.pnpm-setup.outputs.pnpm_cache_dir }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -41,7 +41,7 @@ jobs:
       image: node:18
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Enable Corepack
         id: pnpm-setup
@@ -52,7 +52,7 @@ jobs:
           echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
 
       - name: pnpm Cache
-        uses: buildjet/cache@v3
+        uses: buildjet/cache@v4
         with:
           path: ${{ steps.pnpm-setup.outputs.pnpm_cache_dir }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -74,7 +74,7 @@ jobs:
       image: node:18
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Enable Corepack
         id: pnpm-setup
@@ -85,7 +85,7 @@ jobs:
           echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
 
       - name: pnpm Cache
-        uses: buildjet/cache@v3
+        uses: buildjet/cache@v4
         with:
           path: ${{ steps.pnpm-setup.outputs.pnpm_cache_dir }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -118,7 +118,7 @@ jobs:
           echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
 
       - name: pnpm Cache
-        uses: buildjet/cache@v3
+        uses: buildjet/cache@v4
         with:
           path: ${{ steps.pnpm-setup.outputs.pnpm_cache_dir }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}

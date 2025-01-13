@@ -63,8 +63,8 @@ export const startDevServer = async (
       ) {
         void serveStaticFile(res, parsedUrl, staticBaseDirRelativePath);
       } else if (!isNextReady) {
-        void nextReadyPromise.then(
-          () => nextHandleRequest?.(req, res, parsedUrl),
+        void nextReadyPromise.then(() =>
+          nextHandleRequest?.(req, res, parsedUrl),
         );
       } else {
         void nextHandleRequest?.(req, res, parsedUrl);
@@ -119,8 +119,10 @@ export const startDevServer = async (
   // these environment variables are used on the next app
   // this is the most reliable way of communicating these paths through
   process.env = {
-    ...process.env,
     NODE_ENV: 'development',
+    ...(process.env as Omit<NodeJS.ProcessEnv, 'NODE_ENV'> & {
+      NODE_ENV?: NodeJS.ProcessEnv['NODE_ENV'];
+    }),
     ...getEnvVariablesForPreviewApp(
       // If we don't do normalization here, stuff like https://github.com/resend/react-email/issues/1354 happens.
       path.normalize(emailsDirRelativePath),

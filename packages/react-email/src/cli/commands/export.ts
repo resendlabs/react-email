@@ -12,7 +12,7 @@ import { tree } from '../utils';
 import {
   EmailsDirectory,
   getEmailsDirectoryMetadata,
-} from '../../actions/get-emails-directory-metadata';
+} from '../../utils/get-emails-directory-metadata';
 import { renderingUtilitiesExporter } from '../../utils/esbuild/renderring-utilities-exporter';
 
 const getEmailTemplatesFromDirectory = (emailDirectory: EmailsDirectory) => {
@@ -142,7 +142,7 @@ export const exportTemplates = async (
   }
   if (spinner) {
     spinner.succeed('Rendered all files');
-    spinner.text = `Copying static files`;
+    spinner.text = 'Copying static files';
     spinner.render();
   }
 

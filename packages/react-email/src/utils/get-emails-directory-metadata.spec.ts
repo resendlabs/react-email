@@ -4,7 +4,7 @@ import { getEmailsDirectoryMetadata } from './get-emails-directory-metadata';
 test('getEmailsDirectoryMetadata on demo emails', async () => {
   const emailsDirectoryPath = path.resolve(
     __dirname,
-    '../../../../apps/demo/emails/',
+    '../../../../apps/demo/emails',
   );
   expect(await getEmailsDirectoryMetadata(emailsDirectoryPath)).toEqual({
     absolutePath: emailsDirectoryPath,
@@ -44,6 +44,7 @@ test('getEmailsDirectoryMetadata on demo emails', async () => {
         relativePath: 'notifications',
         emailFilenames: [
           'github-access-token',
+          'papermark-year-in-review',
           'vercel-invite-user',
           'yelp-recent-login',
         ],

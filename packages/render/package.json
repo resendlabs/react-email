@@ -1,6 +1,6 @@
 {
   "name": "@react-email/render",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Transform React components into HTML email templates",
   "sideEffects": false,
   "main": "./dist/browser/index.js",
@@ -86,7 +86,7 @@
   },
   "dependencies": {
     "html-to-text": "9.0.5",
-    "prettier": "3.3.3",
+    "prettier": "3.4.2",
     "react-promise-suspense": "0.3.4"
   },
   "peerDependencies": {
