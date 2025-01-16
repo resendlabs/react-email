@@ -1,5 +1,5 @@
 import { format } from "prettier/standalone";
-import html from "prettier/plugins/html";
+import * as html from "prettier/plugins/html";
 import type { Options } from "prettier";
 
 const defaults: Options = {
