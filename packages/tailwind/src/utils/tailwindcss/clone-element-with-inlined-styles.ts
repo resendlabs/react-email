@@ -4,10 +4,10 @@ import type { EmailElementProps } from '../../tailwind';
 import { sanitizeClassName } from '../compatibility/sanitize-class-name';
 import { makeInlineStylesFor } from '../css/make-inline-styles-for';
 import { sanitizeMediaQueries } from '../css/media-queries/sanitize-media-queries';
+import { sanitizePseudoClasses } from '../css/pseudo-classes/sanitize-pseudo-classes';
 import { sanitizeDeclarations } from '../css/sanitize-declarations';
 import { isComponent } from '../react/is-component';
 import type { setupTailwind } from './setup-tailwind';
-import { sanitizePseudoClasses } from '../css/pseudo-classes/sanitize-pseudo-classes';
 
 export const cloneElementWithInlinedStyles = (
   element: React.ReactElement<EmailElementProps>,
