@@ -1,7 +1,7 @@
 'use client';
 
-import * as React from 'react';
 import * as Collapsible from '@radix-ui/react-collapsible';
+import * as React from 'react';
 import { useEmails } from '../../contexts/emails';
 import { cn } from '../../utils';
 import { Logo } from '../logo';
@@ -29,7 +29,7 @@ export const Sidebar = ({
         <Logo />
       </div>
       <nav className="p-4 flex-grow lg:pt-0 pl-0 w-screen h-[calc(100vh_-_70px)] lg:w-full lg:min-w-[275px] lg:max-w-[275px] flex flex-col overflow-y-auto">
-        <Collapsible.Root>
+        <Collapsible.Root open>
           <React.Suspense>
             <SidebarDirectoryChildren
               currentEmailOpenSlug={currentEmailOpenSlug}

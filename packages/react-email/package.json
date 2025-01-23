@@ -1,6 +1,6 @@
 {
   "name": "react-email",
-  "version": "3.0.6",
+  "version": "3.0.7-canary.0",
   "description": "A live preview of your emails right in your browser.",
   "bin": {
     "email": "./dist/cli/index.js"
@@ -10,8 +10,7 @@
     "dev": "tsup-node --watch",
     "test": "vitest run",
     "test:watch": "vitest",
-    "clean": "rm -rf dist",
-    "lint": "eslint . && tsc"
+    "clean": "rm -rf dist"
   },
   "license": "MIT",
   "repository": {
@@ -19,10 +18,7 @@
     "url": "https://github.com/resend/react-email.git",
     "directory": "packages/react-email"
   },
-  "keywords": [
-    "react",
-    "email"
-  ],
+  "keywords": ["react", "email"],
   "engines": {
     "node": ">=18.0.0"
   },
@@ -33,7 +29,7 @@
     "chokidar": "4.0.3",
     "commander": "11.1.0",
     "debounce": "2.0.0",
-    "esbuild": "0.19.11",
+    "esbuild": "0.23.0",
     "glob": "10.3.4",
     "log-symbols": "4.1.0",
     "mime-types": "2.1.35",
@@ -62,9 +58,6 @@
     "@vercel/style-guide": "5.1.0",
     "autoprefixer": "10.4.20",
     "clsx": "2.1.0",
-    "eslint": "8.50.0",
-    "eslint-config-prettier": "9.0.0",
-    "eslint-config-turbo": "2.1.0",
     "framer-motion": "12.0.0-alpha.2",
     "postcss": "8.4.40",
     "prism-react-renderer": "2.1.0",
